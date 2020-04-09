@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import TodoList from './TodoList';
+import {Context} from './context';
 
 
 // test
@@ -16,7 +17,12 @@ function App() {
 
   useEffect(() => {
     const raw = localStorage.getItem('todos') || [];
-    setTodos(JSON.parse(raw));
+    
+    if(raw.length > 0) {
+      setTodos(JSON.parse(raw));
+    }
+    
+    
   }, []);
 
   useEffect(() => {
@@ -45,20 +51,41 @@ function App() {
     }
   }
 
+  const removeTodo = (id) => {
+    setTodos(todos.filter(todo => {
+      return todo.id !==id
+    }))
+  }
+
+  const toggleTodo = id => {
+    setTodos(todos.map(todo => {
+      if(todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    }))
+  }
+
   return (
-    <div className="container">
-      <h1>Todo list</h1>
-      <div className='input-field'>
-        <input
-          value={todoTitle}
-          onChange={e => setTodoTitle(e.target.value)}
-          onKeyPress={addTodo}
-          type='text'
-        />
-        <label>Todo name</label>
+    // оборачиваем для передачи C
+    <Context.Provider value={{
+      toggleTodo, removeTodo
+    }}>
+      <div className="container">
+        <h1>Todo list</h1>
+        <div className='input-field'>
+          <input
+            value={todoTitle}
+            onChange={e => setTodoTitle(e.target.value)}
+            onKeyPress={addTodo}
+            type='text'
+          />
+          <label>Todo name</label>
+        </div>
+        <TodoList todos={todos} />
       </div>
-      <TodoList todos={todos} />
-    </div>
+    </Context.Provider>
+    
   );
 }
 

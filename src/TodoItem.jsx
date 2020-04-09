@@ -3,7 +3,7 @@ import {Context} from './context';
 
 
 const TodoItem = ({title, id, completed}) => {
-    const {toggleTodo, removeTodo} = useContext(Context);
+    const {dispatch} = useContext(Context);
 
     const cls = ['todo'];
 
@@ -15,13 +15,18 @@ const TodoItem = ({title, id, completed}) => {
        <li className={cls.join(' ')}>
            <label>
                <input
-                    id="indeterminate-checkbox"
                     type='checkbox'
                     checked={completed}
-                    onChange={() => toggleTodo(id)}
+                    onChange={() => dispatch({
+                        type: 'TOGGLE',
+                        payload: id
+                    })}
                 />
                <span>{title}</span>
-               <button onClick={() => removeTodo(id)}>
+               <button onClick={() => dispatch({
+                        type: 'REMOVE',
+                        payload: id
+                    })}>
                    delete
                </button>
            </label>

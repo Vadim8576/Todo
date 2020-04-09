@@ -1,75 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import TodoList from './TodoList';
 import {Context} from './context';
+import reducer from './reducer';
 
 
 // test
 function App() {
-  const [todos, setTodos] = useState([]);
+
+  const [state, dispatch] = useReducer(reducer, JSON.parse(localStorage.getItem('todos')) || []); // [] - начальное состояние state
+
   const [todoTitle, setTodoTitle] = useState('');
 
 
-  const handleClick = () => {
-    console.log('click');
-  }
+  // const handleClick = () => {
+  //   console.log('click');
+  // }
+
+    
+  
 
   useEffect(() => {
-    const raw = localStorage.getItem('todos') || [];
-    
-    if(raw.length > 0) {
-      setTodos(JSON.parse(raw));
-    }
-    
-    
-  }, []);
+    // document.addEventListener('click', handleClick);
 
-  useEffect(() => {
-
-    document.addEventListener('click', handleClick);
-
-    localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem('todos', JSON.stringify(state));
 
     // если вешаем слушателя, обязательно его удаляем, чтобы не было "утечки памяти"
-    return () => {
-      document.removeEventListener('click', handleClick);
-    }
-  }, [todos]);
+    // return () => {
+    //   document.removeEventListener('click', handleClick);
+    // }
+  }, [state]);
+
 
   const addTodo = (e) => {
     if(e.key === 'Enter') {
-      setTodos([
-        ...todos,
-        {
-          id: Date.now(),
-          title: todoTitle,
-          completed: false
-        }
-      ]);
+      dispatch({
+        type: 'ADD',
+        payload: todoTitle
+      });
+
       setTodoTitle('');
     }
   }
 
-  const removeTodo = (id) => {
-    setTodos(todos.filter(todo => {
-      return todo.id !==id
-    }))
-  }
+  // const removeTodo = (id) => {
+  //   setTodos(todos.filter(todo => {
+  //     return todo.id !==id
+  //   }))
+  // }
 
-  const toggleTodo = id => {
-    setTodos(todos.map(todo => {
-      if(todo.id === id) {
-        todo.completed = !todo.completed;
-      }
-      return todo;
-    }))
-  }
+  // const toggleTodo = id => {
+  //   setTodos(todos.map(todo => {
+  //     if(todo.id === id) {
+  //       todo.completed = !todo.completed;
+  //     }
+  //     return todo;
+  //   }))
+  // }
 
   return (
     // оборачиваем для передачи C
     <Context.Provider value={{
-      toggleTodo, removeTodo
+      dispatch
     }}>
       <div className="container">
         <h1>Todo list</h1>
@@ -82,7 +75,7 @@ function App() {
           />
           <label>Todo name</label>
         </div>
-        <TodoList todos={todos} />
+        <TodoList todos={state} />
       </div>
     </Context.Provider>
     

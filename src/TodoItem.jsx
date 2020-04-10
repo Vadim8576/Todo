@@ -1,15 +1,24 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Context} from './context';
+import {checkedToggle} from './reducer';
 
 
 const TodoItem = ({title, id, completed}) => {
-    const {dispatch} = useContext(Context);
+    const {dispatch, state} = useContext(Context);
 
+    // console.log(checkedToggle);
+    
     const cls = ['todo'];
 
     if(completed) {
         cls.push('completed');
     }
+    
+    useEffect(() => {
+        let inp = document.querySelector('input[type=checkbox]');
+        console.log(inp.checked);
+    }, []);
+
 
     return (
        <li className={cls.join(' ')}>
@@ -17,18 +26,17 @@ const TodoItem = ({title, id, completed}) => {
                <input
                     type='checkbox'
                     checked={completed}
-                    onChange={() => dispatch({
-                        type: 'TOGGLE',
-                        payload: id
-                    })}
+                    onChange={() => dispatch(checkedToggle(id))}
                 />
                <span>{title}</span>
-               <button onClick={() => dispatch({
+                <i className="material-icons red-text"
+                    onClick={() => dispatch({
                         type: 'REMOVE',
                         payload: id
-                    })}>
-                   delete
-               </button>
+                    })}
+                >
+                    delete
+               </i>
            </label>
        </li>
     );

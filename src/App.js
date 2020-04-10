@@ -18,12 +18,12 @@ function App() {
   //   console.log('click');
   // }
 
-    
+
   
 
   useEffect(() => {
     // document.addEventListener('click', handleClick);
-
+    console.log('state поменялся');
     localStorage.setItem('todos', JSON.stringify(state));
 
     // если вешаем слушателя, обязательно его удаляем, чтобы не было "утечки памяти"
@@ -60,9 +60,9 @@ function App() {
   // }
 
   return (
-    // оборачиваем для передачи C
+    // оборачиваем для передачи Context
     <Context.Provider value={{
-      dispatch
+      dispatch, state
     }}>
       <div className="container">
         <h1>Todo list</h1>

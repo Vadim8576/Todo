@@ -1,8 +1,8 @@
 const reducer = (state, action) => {
-    console.log(action);
+    // console.log(action);
     switch (action.type) {
         case 'ADD':
-            console.log('add', Date.now());
+            // console.log('add', Date.now());
             return [
                 ...state,
                 {
@@ -34,4 +34,4 @@ const reducer = (state, action) => {
 
 export default reducer;
 
-export const checkedToggle = (id) => ({type: 'TOGGLE', payload: id})
+export const checkedToggle = (id) => ({type: 'TOGGLE', payload: id});

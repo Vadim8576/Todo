@@ -6,12 +6,18 @@ import {Context} from './context';
 import reducer from './reducer';
 
 
-// test
+
 function App() {
 
-  const [state, dispatch] = useReducer(reducer, JSON.parse(localStorage.getItem('todos')) || []); // [] - начальное состояние state
+  
+  const ls = JSON.parse(localStorage.getItem('todos')) || []; // [] - начальное состояние state
+  
+  const [state, dispatch] = useReducer(reducer, ls);
 
   const [todoTitle, setTodoTitle] = useState('');
+
+
+  
 
 
   // const handleClick = () => {
@@ -19,7 +25,7 @@ function App() {
   // }
 
 
-  
+  /*
 
   useEffect(() => {
     // document.addEventListener('click', handleClick);
@@ -31,7 +37,7 @@ function App() {
     //   document.removeEventListener('click', handleClick);
     // }
   }, [state]);
-
+*/
 
   const addTodo = (e) => {
     if(e.key === 'Enter') {

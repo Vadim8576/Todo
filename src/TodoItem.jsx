@@ -4,9 +4,10 @@ import {checkedToggle} from './reducer';
 
 
 const TodoItem = ({title, id, completed}) => {
-    const {dispatch, state} = useContext(Context);
+    
+    const {dispatch} = useContext(Context);
 
-    // console.log(checkedToggle);
+    // console.log(title, id, completed);
     
     const cls = ['todo'];
 
@@ -14,10 +15,10 @@ const TodoItem = ({title, id, completed}) => {
         cls.push('completed');
     }
     
-    useEffect(() => {
-        let inp = document.querySelector('input[type=checkbox]');
-        console.log(inp.checked);
-    }, []);
+    // useEffect(() => {
+    //     let inp = document.querySelector('input[type=checkbox]');
+    //     console.log(inp.checked);
+    // }, []);
 
 
     return (
@@ -26,20 +27,22 @@ const TodoItem = ({title, id, completed}) => {
                <input
                     type='checkbox'
                     checked={completed}
-                    onChange={() => dispatch(checkedToggle(id))}
+                    onChange={(e) => dispatch(checkedToggle(id))}
                 />
                <span>{title}</span>
-                <i className="material-icons red-text"
+               <i className="material-icons red-text"
                     onClick={() => dispatch({
                         type: 'REMOVE',
                         payload: id
                     })}
                 >
                     delete
-               </i>
+                </i>
            </label>
        </li>
     );
 }
 
 export default TodoItem;
+
+

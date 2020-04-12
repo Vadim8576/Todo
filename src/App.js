@@ -1,3 +1,9 @@
+
+// https://www.youtube.com/watch?v=V1rhxheJg4A
+
+
+
+
 import React, { useState, useEffect, useReducer } from 'react';
 // import logo from './logo.svg';
 import './App.css';
@@ -41,12 +47,15 @@ function App() {
 
   const addTodo = (e) => {
     if(e.key === 'Enter') {
-      dispatch({
-        type: 'ADD',
-        payload: todoTitle
-      });
+      if(todoTitle !== '') {
+        dispatch({
+          type: 'ADD',
+          payload: todoTitle
+        });
 
-      setTodoTitle('');
+       setTodoTitle('');
+      }
+        
     }
   }
 

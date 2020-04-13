@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from 'react';
 import {Context} from './context';
-import {checkedToggle} from './reducer';
+
 
 
 const TodoItem = ({title, id, completed}) => {
     
-    const {dispatch} = useContext(Context);
+    const {dispatch, checkedToggle} = useContext(Context);
 
     // console.log(title, id, completed);
     

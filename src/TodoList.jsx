@@ -2,12 +2,12 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 
-const TodoList = ({todos}) => {
+const TodoList = ({notes}) => {
 
     // console.log(todos);
     return (
         <ul>
-            {todos.map(item => <TodoItem key={item.id} {...item}  />)}
+            {notes.map(item => <TodoItem key={item.id} {...item}  />)}
         </ul>
     );
 }

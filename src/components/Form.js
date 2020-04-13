@@ -1,5 +1,5 @@
 import React from 'react';
-
+import {addNote} from './../reducer';
 
 export const Form = () => {
 

@@ -2,28 +2,43 @@
 // https://www.youtube.com/watch?v=V1rhxheJg4A
 
 
-
-
 import React, { useState, useEffect, useReducer } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import TodoList from './TodoList';
 import {Context} from './context';
 import reducer from './reducer';
+import {showLoader, addNote, removeNote, fetchNotes, checkedToggle, showLoaderAC} from './reducer'
+import { Loader } from './components/Loader';
+import axios from 'axios';
 
 
 
 function App() {
-
+  
   
   const ls = JSON.parse(localStorage.getItem('todos')) || []; // [] - начальное состояние state
-  
-  const [state, dispatch] = useReducer(reducer, ls);
+  const [state, dispatch] = useReducer(reducer, {notes: [], loading: false});
+
+  // const ls = JSON.parse(localStorage.getItem('todos')) || []; // [] - начальное состояние state
+  // const [state, dispatch] = useReducer(reducer, ls);
+
+
 
   const [todoTitle, setTodoTitle] = useState('');
 
 
   
+
+
+  useEffect(() => {
+    dispatch(showLoaderAC());
+    fetchNotes();
+    // eslint-disable-next-line
+  }, [])
+  
+
+
 
 
   // const handleClick = () => {
@@ -48,10 +63,7 @@ function App() {
   const addTodo = (e) => {
     if(e.key === 'Enter') {
       if(todoTitle !== '') {
-        dispatch({
-          type: 'ADD',
-          payload: todoTitle
-        });
+        addNote(todoTitle);
 
        setTodoTitle('');
       }
@@ -77,9 +89,10 @@ function App() {
   return (
     // оборачиваем для передачи Context
     <Context.Provider value={{
-      dispatch, state
+      dispatch, checkedToggle, state
     }}>
-      <div className="container">
+      
+        <div className="container">
         <h1>Todo list</h1>
         <div className='input-field'>
           <input
@@ -90,8 +103,13 @@ function App() {
           />
           <label>Todo name</label>
         </div>
-        <TodoList todos={state} />
+        {state.loading && <Loader />
+        || <TodoList notes={state.notes} />
+        }
       </div>
+      
+      
+
     </Context.Provider>
     
   );

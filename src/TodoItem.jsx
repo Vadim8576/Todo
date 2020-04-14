@@ -1,13 +1,12 @@
 import React, {useContext, useEffect} from 'react';
 import {Context} from './context';
+import {api} from './api/api';
 
 
 
-const TodoItem = ({title, id, completed}) => {
+const TodoItem = ({date, title, id, completed}) => {
     
-    const {dispatch, checkedToggle} = useContext(Context);
-
-    // console.log(title, id, completed);
+    // const {checkedToggle, removeNode} = useContext(Context);
     
     const cls = ['todo'];
 
@@ -15,11 +14,6 @@ const TodoItem = ({title, id, completed}) => {
         cls.push('completed');
     }
     
-    // useEffect(() => {
-    //     let inp = document.querySelector('input[type=checkbox]');
-    //     console.log(inp.checked);
-    // }, []);
-
 
     return (
        <li className={cls.join(' ')}>
@@ -27,14 +21,14 @@ const TodoItem = ({title, id, completed}) => {
                <input
                     type='checkbox'
                     checked={completed}
-                    onChange={(e) => dispatch(checkedToggle(id))}
+                    // onChange={(e) => checkedToggle(id)}
                 />
-               <span>{title}</span>
+                <span><b>{title}</b> <small>{date}</small></span>
                <i className="material-icons red-text"
-                    onClick={() => dispatch({
-                        type: 'REMOVE',
-                        payload: id
-                    })}
+                    onClick={() => {
+                        // removeNode(id);
+                        // console.log(id);
+                }}
                 >
                     delete
                 </i>

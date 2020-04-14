@@ -7,67 +7,79 @@ import React, { useState, useEffect, useReducer } from 'react';
 import './App.css';
 import TodoList from './TodoList';
 import {Context} from './context';
-import reducer from './reducer';
-import {showLoader, addNote, removeNote, fetchNotes, checkedToggle, showLoaderAC} from './reducer'
+import reducer from './redux/nodesReducer';
+import {showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes} from './redux/nodesReducer'
 import { Loader } from './components/Loader';
-import axios from 'axios';
+import { connect } from 'react-redux';
+
+
+const setDate = () => {
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timezone: 'UTC'
+  }; 
+  return new Date().toLocaleString("ru", options);
+}
 
 
 
-function App() {
+
+const App = ({getNodes, addNode, removeNode, loading, nodes}) => {
+
+  // console.log(store);
+
   
-  
-  const ls = JSON.parse(localStorage.getItem('todos')) || []; // [] - начальное состояние state
-  const [state, dispatch] = useReducer(reducer, {notes: [], loading: false});
-
-  // const ls = JSON.parse(localStorage.getItem('todos')) || []; // [] - начальное состояние state
-  // const [state, dispatch] = useReducer(reducer, ls);
-
-
+  // const [loading, isLoading] = useReducer(reducer, {loading: false});
 
   const [todoTitle, setTodoTitle] = useState('');
+  const [error, isError] = useState(false);
 
-
-  
 
 
   useEffect(() => {
-    dispatch(showLoaderAC());
-    fetchNotes();
+    // alert();
+    getNodes();
+    // dispatch(showLoader());
+    // api.fetchNotes()
+    //   .then((response) => {
+    //     console.log(response);
+
+    //     if(response) {
+    //       const nodes = Object.keys(response).map(key => {
+    //         return {
+    //           ...response[key],
+    //           id: key 
+    //         }
+    //       });
+    //       console.log(nodes);
+    //       dispatch(fetchNotes(nodes));
+    //       dispatch(hideLoader());
+    //     } else {
+    //       isError(true);
+    //     }
+        
+    //   });
     // eslint-disable-next-line
   }, [])
   
 
 
-
-
-  // const handleClick = () => {
-  //   console.log('click');
-  // }
-
-
-  /*
-
-  useEffect(() => {
-    // document.addEventListener('click', handleClick);
-    console.log('state поменялся');
-    localStorage.setItem('todos', JSON.stringify(state));
-
-    // если вешаем слушателя, обязательно его удаляем, чтобы не было "утечки памяти"
-    // return () => {
-    //   document.removeEventListener('click', handleClick);
-    // }
-  }, [state]);
-*/
-
   const addTodo = (e) => {
     if(e.key === 'Enter') {
-      if(todoTitle !== '') {
-        addNote(todoTitle);
 
-       setTodoTitle('');
-      }
-        
+      if(todoTitle !== '') {
+        const payload = {
+          title: todoTitle,
+          date: setDate()
+        }
+
+        addNode(payload);
+      } 
     }
   }
 
@@ -87,11 +99,10 @@ function App() {
   // }
 
   return (
-    // оборачиваем для передачи Context
-    <Context.Provider value={{
-      dispatch, checkedToggle, state
-    }}>
-      
+
+      // <Context value={{
+      //   checkedToggle, removeNode
+      // }}>     
         <div className="container">
         <h1>Todo list</h1>
         <div className='input-field'>
@@ -103,16 +114,38 @@ function App() {
           />
           <label>Todo name</label>
         </div>
-        {state.loading && <Loader />
-        || <TodoList notes={state.notes} />
-        }
+        
+          
+          {loading
+            && <Loader />
+            || <TodoList nodes={nodes} removeNode={removeNode} />
+          }
+          {/* {error && <span>Ошибка загрузки данных с сервера!</span>} */}
+        
+        
       </div>
-      
-      
-
-    </Context.Provider>
-    
+    // </Context>
   );
 }
 
-export default App;
+
+const mapStateToProps = (state) => (
+  {
+    loading: state.nodes.loading,
+    nodes: state.nodes.nodes
+  }
+)
+
+const AppContainer = connect(mapStateToProps,
+  {
+    getNodes,
+    showLoader,
+    hideLoader,
+    checkedToggle,
+    addNode,
+    removeNode
+  })(App);
+
+export default AppContainer;
+
+

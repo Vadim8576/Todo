@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'materialize-css';
+import store from './redux/reduxStore';
+import {Provider} from 'react-redux';
+import AppContainer from './App';
 
 ReactDOM.render(
-  // <React.StrictMode>
-    <App />,
-  // </React.StrictMode>,
+  <Provider store={store}>
+    <AppContainer />
+  </Provider>,
   document.getElementById('root')
 );
 

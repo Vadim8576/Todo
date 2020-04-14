@@ -1,39 +1,39 @@
-import React, {useContext, useEffect} from 'react';
-import {Context} from './context';
-import {api} from './api/api';
+import React from 'react';
 
 
 
-const TodoItem = ({date, title, id, completed}) => {
-    
-    // const {checkedToggle, removeNode} = useContext(Context);
-    
+
+const TodoItem = ({ date, title, id, selected, removeNode, checkedToggle }) => {
+
     const cls = ['todo'];
 
-    if(completed) {
+    if (selected) {
         cls.push('completed');
     }
-    
+
 
     return (
-       <li className={cls.join(' ')}>
-           <label>
-               <input
+        <li className={cls.join(' ')}>
+            <label>
+                <input
                     type='checkbox'
-                    checked={completed}
-                    // onChange={(e) => checkedToggle(id)}
+                // checked={selected}
+                // onChange={(e) => checkedToggle(id)}
                 />
+
                 <span><b>{title}</b> <small>{date}</small></span>
-               <i className="material-icons red-text"
-                    onClick={() => {
-                        // removeNode(id);
-                        // console.log(id);
-                }}
+
+               
+                <div className="waves-effect waves-light btn red"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        removeNode(id)
+                    }}
                 >
-                    delete
-                </i>
-           </label>
-       </li>
+                    <i className="material-icons center">shopping_cart</i>
+                </div>
+            </label>
+        </li>
     );
 }
 

@@ -1,0 +1,21 @@
+.shoppingListHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    cursor: pointer;
+    background: #065685;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  .shoppingBasketHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    cursor: pointer;
+    background: #068517;
+    color: #fff;
+    padding: 10px;
+  }

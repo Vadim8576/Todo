@@ -30,9 +30,10 @@ code {
   justify-content: space-between;
   cursor: pointer;
   background: #f3f3f3;
-  padding: 1rem;
+  padding: 10px;
 }
 
 .todo i {
   z-index: 2;
 }
+

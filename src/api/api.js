@@ -8,24 +8,26 @@ const instanse = axios.create({
 export const api = {
 
     fetchNodes() {
-        console.log('fetch');
-        try {
-            return instanse.get(`/nodes.json`)
-                            .then(response => response.data);
-        } catch(e) {
-            return false;
-        }
+        return  instanse.get(`/nodes.json`)
+                .then(response => response.data)
+                .catch(e => {
+                    return false;
+                })
     },
 
     addNode(node) {
-
         return instanse.post(`/nodes.json`, node)
-                .then(response => response.data);    
+                .then(response => response.data)
+                .catch(e => {
+                    return false;
+                }) 
     },
     
     removeNode(id) {
-    
         return instanse.delete(`/nodes/${id}.json`)
-                .then(response => response.data);
+                .then(response => response.data)
+                .catch(e => {
+                    return false;
+                })
     }
 }

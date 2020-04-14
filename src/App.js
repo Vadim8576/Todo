@@ -1,16 +1,13 @@
-
-// https://www.youtube.com/watch?v=V1rhxheJg4A
-
-
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import TodoList from './TodoList';
-import {Context} from './context';
-import reducer from './redux/nodesReducer';
-import {showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes} from './redux/nodesReducer'
-import { Loader } from './components/Loader';
+import { showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError } from './redux/nodesReducer';
 import { connect } from 'react-redux';
+import ShopingList from './components/ShopingList';
+import ShoppingBasket from './components/ShoppingBasket';
+
+
+import GoogleLogin from 'react-google-login';
 
 
 const setDate = () => {
@@ -22,72 +19,47 @@ const setDate = () => {
     minute: 'numeric',
     second: 'numeric',
     timezone: 'UTC'
-  }; 
+  };
   return new Date().toLocaleString("ru", options);
 }
 
 
 
+const responseGoogle = (response) => {
+  console.log(response);
+}
 
-const App = ({getNodes, addNode, removeNode, loading, nodes}) => {
 
-  // console.log(store);
 
-  
+const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
+
   // const [loading, isLoading] = useReducer(reducer, {loading: false});
 
   const [todoTitle, setTodoTitle] = useState('');
-  const [error, isError] = useState(false);
-
+  // const [error, isError] = useState(false);
 
 
   useEffect(() => {
-    // alert();
     getNodes();
-    // dispatch(showLoader());
-    // api.fetchNotes()
-    //   .then((response) => {
-    //     console.log(response);
-
-    //     if(response) {
-    //       const nodes = Object.keys(response).map(key => {
-    //         return {
-    //           ...response[key],
-    //           id: key 
-    //         }
-    //       });
-    //       console.log(nodes);
-    //       dispatch(fetchNotes(nodes));
-    //       dispatch(hideLoader());
-    //     } else {
-    //       isError(true);
-    //     }
-        
-    //   });
     // eslint-disable-next-line
   }, [])
-  
 
 
   const addTodo = (e) => {
-    if(e.key === 'Enter') {
+    if (e.key === 'Enter') {
 
-      if(todoTitle !== '') {
+      if (todoTitle !== '') {
         const payload = {
           title: todoTitle,
           date: setDate()
         }
 
         addNode(payload);
-      } 
+        setTodoTitle('');
+
+      }
     }
   }
-
-  // const removeTodo = (id) => {
-  //   setTodos(todos.filter(todo => {
-  //     return todo.id !==id
-  //   }))
-  // }
 
   // const toggleTodo = id => {
   //   setTodos(todos.map(todo => {
@@ -100,31 +72,45 @@ const App = ({getNodes, addNode, removeNode, loading, nodes}) => {
 
   return (
 
-      // <Context value={{
-      //   checkedToggle, removeNode
-      // }}>     
-        <div className="container">
-        <h1>Todo list</h1>
-        <div className='input-field'>
-          <input
-            value={todoTitle}
-            onChange={e => setTodoTitle(e.target.value)}
-            onKeyPress={addTodo}
-            type='text'
-          />
-          <label>Todo name</label>
-        </div>
-        
-          
-          {loading
-            && <Loader />
-            || <TodoList nodes={nodes} removeNode={removeNode} />
-          }
-          {/* {error && <span>Ошибка загрузки данных с сервера!</span>} */}
-        
-        
+    <div className="container">
+
+      <GoogleLogin
+        clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+      />
+      
+      <h3>ПОКУПКИ</h3>
+
+
+      <div className='input-field'>
+        <input
+          value={todoTitle}
+          onChange={e => setTodoTitle(e.target.value)}
+          onKeyPress={addTodo}
+          type='text'
+        />
+        <label>Введите товар </label>
+        {/* <i className="material-icons">add</i> */}
       </div>
-    // </Context>
+
+      <ShopingList
+        nodes={props.nodes}
+        removeNode={removeNode}
+        checkedToggle={checkedToggle}
+        loading={props.loading}
+      />
+
+      <ShoppingBasket
+        nodes={props.nodes}
+        removeNode={removeNode}
+        checkedToggle={checkedToggle}
+        loading={props.loading}
+      />
+
+    </div>
   );
 }
 
@@ -132,9 +118,11 @@ const App = ({getNodes, addNode, removeNode, loading, nodes}) => {
 const mapStateToProps = (state) => (
   {
     loading: state.nodes.loading,
-    nodes: state.nodes.nodes
+    nodes: state.nodes.nodes,
+    isError: state.nodes.isError
   }
 )
+
 
 const AppContainer = connect(mapStateToProps,
   {
@@ -143,8 +131,10 @@ const AppContainer = connect(mapStateToProps,
     hideLoader,
     checkedToggle,
     addNode,
-    removeNode
+    removeNode,
+    showError
   })(App);
+
 
 export default AppContainer;
 

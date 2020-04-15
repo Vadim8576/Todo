@@ -2,15 +2,18 @@ import React from 'react';
 import TodoList from '../TodoList';
 import css from './css.module.css';
 
-const ShoppingBasket = ({removeNode,checkedToggle, ...props}) => {
-    return (
-        <div className={css.shoppingBasket}>
-        <div className={css.shoppingBasketHeader}>
-          <i className="material-icons">format_list_bulleted</i>
-          <span>КОРЗИНА</span>
-        </div>
+const ShoppingBasket = ({ removeNode, checkedToggle, ...props }) => {
+  return (
 
-        {/* {props.loading
+
+    <div className={css.shoppingBasket}>
+      <div className={css.shoppingBasketHeader}>
+        <i className="material-icons center">shopping_cart</i>
+          &emsp;
+          <span>КОРЗИНА</span>
+      </div>
+
+      {/* {props.loading
           ? <div className="progress">
             <div className="indeterminate"></div>
           </div>
@@ -22,8 +25,8 @@ const ShoppingBasket = ({removeNode,checkedToggle, ...props}) => {
           />
         }
         {props.isError && <span>Ошибка загрузки данных с сервера!</span>} */}
-      </div>
-    )
+    </div>
+  )
 
 }
 

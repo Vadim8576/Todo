@@ -7,9 +7,6 @@ import ShopingList from './components/ShopingList';
 import ShoppingBasket from './components/ShoppingBasket';
 
 
-import GoogleLogin from 'react-google-login';
-
-
 const setDate = () => {
   const options = {
     year: 'numeric',
@@ -24,19 +21,10 @@ const setDate = () => {
 }
 
 
-
-const responseGoogle = (response) => {
-  console.log(response);
-}
-
-
-
 const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
-
-  // const [loading, isLoading] = useReducer(reducer, {loading: false});
+  console.log(props.nodes);
 
   const [todoTitle, setTodoTitle] = useState('');
-  // const [error, isError] = useState(false);
 
 
   useEffect(() => {
@@ -51,7 +39,8 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
       if (todoTitle !== '') {
         const payload = {
           title: todoTitle,
-          date: setDate()
+          date: setDate(),
+          completed: false
         }
 
         addNode(payload);
@@ -61,41 +50,28 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
     }
   }
 
-  // const toggleTodo = id => {
-  //   setTodos(todos.map(todo => {
-  //     if(todo.id === id) {
-  //       todo.completed = !todo.completed;
-  //     }
-  //     return todo;
-  //   }))
-  // }
 
   return (
+    <>
+    <div className='fixed'>
+      <div className='container'>
+        <h5 className='fixed-h'>ПОКУПКИ</h5>
 
-    <div className="container">
-
-      <GoogleLogin
-        clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        cookiePolicy={'single_host_origin'}
-      />
-      
-      <h3>ПОКУПКИ</h3>
-
-
-      <div className='input-field'>
-        <input
-          value={todoTitle}
-          onChange={e => setTodoTitle(e.target.value)}
-          onKeyPress={addTodo}
-          type='text'
-        />
-        <label>Введите товар </label>
-        {/* <i className="material-icons">add</i> */}
+        <div className='input-field'>
+          <input
+          className='white-text'
+            value={todoTitle}
+            onChange={e => setTodoTitle(e.target.value)}
+            onKeyPress={addTodo}
+            type='text'
+          />
+          <label>Введите товар </label>
+          {/* <i className="material-icons">add</i> */}
+        </div>
+        </div>
       </div>
 
+    <div className="container scroll">
       <ShopingList
         nodes={props.nodes}
         removeNode={removeNode}
@@ -111,6 +87,7 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
       />
 
     </div>
+    </> 
   );
 }
 

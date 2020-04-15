@@ -1,36 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 
+const TodoItem = ({ date, title, id, removeNode, checkedToggle, ...props }) => {
 
-const TodoItem = ({ date, title, id, selected, removeNode, checkedToggle }) => {
+
+    useEffect(() => {
+        setSelect();
+
+    }, [])
+
 
     const cls = ['todo'];
 
-    if (selected) {
+    if (complited) {
         cls.push('completed');
     }
 
-
+ 
     return (
+
         <li className={cls.join(' ')}>
             <label>
                 <input
                     type='checkbox'
-                // checked={selected}
-                // onChange={(e) => checkedToggle(id)}
+                    checked={complited}
+                    onChange={(e) => checkedToggle(id)}
                 />
 
                 <span><b>{title}</b> <small>{date}</small></span>
 
-               
-                <div className="waves-effect waves-light btn red"
+                
+                {/* <a class="waves-effect waves-light btn-small">
+                    <i class="material-icons left">cloud</i>
+                    button
+                </a> */}
+                <div className="waves-effect waves-light btn-flat deep-orange"
                     onClick={(e) => {
                         e.preventDefault();
                         removeNode(id)
                     }}
                 >
-                    <i className="material-icons center">shopping_cart</i>
+                    <i className="material-icons center white-text">
+                        shopping_cart
+                    </i>
                 </div>
             </label>
         </li>

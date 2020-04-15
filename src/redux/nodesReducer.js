@@ -26,16 +26,17 @@ const reducer = (state = initialState, action) => {
                nodes: [...state.nodes, action.payload]
             }
         }
-        case TOGGLE: 
-            return state.map(todo => {
-               
+        case TOGGLE: {
+            console.log(action.payload);
+
+            return state.nodes.map(todo => {
                 if(todo.id === action.payload) {
                     todo.completed = !todo.completed;
                     console.log('toggle', todo.completed);
                 }
                 return todo;
             })
-
+        }
         case REMOVE_NODE: 
             return {
                 ...state,
@@ -119,6 +120,7 @@ export const addNode = (payload) => (dispatch) => {
         
         if(response) {
             payload.id = response.name;
+            
             dispatch(addNodeAC(payload));
             // console.log(payload);
 
@@ -136,7 +138,8 @@ export const removeNode = (id) => (dispatch) => {
     const response = api.removeNode(id);
     response.then(response => {
         if(response === null) {
-            dispatch(removeNodeAC(id))
+            dispatch(removeNodeAC(id));
+            // console.log('remove');
         } else {
             dispatch(showError());
         }

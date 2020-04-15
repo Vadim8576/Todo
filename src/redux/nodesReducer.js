@@ -1,4 +1,4 @@
-import {api} from './../api/api';
+import { api } from './../api/api';
 
 const ADD_NODE = 'ADD_NODE';
 const TOGGLE = 'TOGGLE';
@@ -7,7 +7,7 @@ const SHOW_LOADER = 'SHOW_LOADER';
 const HIDE_LOADER = 'HIDE_LOADER';
 const FETCH_NODES = 'FETCH_NODES';
 const SHOW_ERROR = 'SHOW_ERROR';
-
+// const REMOVE_SELECTED = 'REMOVE_SELECTED';
 
 
 const initialState = {
@@ -20,48 +20,56 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_NODE: {
+
+        // case REMOVE_SELECTED:
+        //     return {
+        //         ...state,
+        //         nodes: state.nodes.filter(node => !node.selected)
+        //     }
+
+        case ADD_NODE:
             return {
                 ...state,
-               nodes: [...state.nodes, action.payload]
+                nodes: [...state.nodes, action.payload]
             }
-        }
-        case TOGGLE: {
-            console.log(action.payload);
+        case TOGGLE:
 
-            return state.nodes.map(todo => {
-                if(todo.id === action.payload) {
-                    todo.completed = !todo.completed;
-                    console.log('toggle', todo.completed);
-                }
-                return todo;
-            })
-        }
-        case REMOVE_NODE: 
+            return {
+                ...state,
+                nodes: state.nodes.map((todo) => {
+                    if (todo.id === action.payload) {
+                        todo.selected = !todo.selected;
+                        console.log('todo', todo);
+                    }
+                    return todo;
+                })
+            }
+        case REMOVE_NODE:
             return {
                 ...state,
                 nodes: state.nodes.filter(node => node.id !== action.payload)
             }
 
-        case SHOW_LOADER: 
+        case SHOW_LOADER:
             return {
                 ...state,
                 loading: true
             }
 
-        case HIDE_LOADER: 
+        case HIDE_LOADER:
             return {
                 ...state,
                 loading: false
             }
 
-        case FETCH_NODES:
+        case FETCH_NODES: {
+            console.log('FETCH_NODES');
             return {
                 ...state,
                 nodes: action.payload
             }
-        
-        case SHOW_ERROR: 
+        }
+        case SHOW_ERROR:
             return {
                 ...state,
                 isError: true
@@ -75,39 +83,69 @@ const reducer = (state = initialState, action) => {
 
 export default reducer;
 
-export const checkedToggle = (id) => ({type: 'TOGGLE', payload: id});
-export const showError = () => ({type: 'SHOW_ERROR'});
-export const showLoader = () => ({type: 'SHOW_LOADER'});
-export const hideLoader = () => ({type: 'HIDE_LOADER'})
-const addNodeAC = (node) => ({type: 'ADD_NODE', payload: node});
-const removeNodeAC = (id) => ({type: 'REMOVE_NODE', payload: id});
-const fetchNodes = (nodes) => ({type: 'FETCH_NODES', payload: nodes});
+
+const checkedToggleAC = (id) => ({ type: 'TOGGLE', payload: id });
+export const showError = () => ({ type: 'SHOW_ERROR' });
+export const showLoader = () => ({ type: 'SHOW_LOADER' });
+export const hideLoader = () => ({ type: 'HIDE_LOADER' })
+const addNodeAC = (node) => ({ type: 'ADD_NODE', payload: node });
+const removeNodeAC = (id) => ({ type: 'REMOVE_NODE', payload: id });
+const fetchNodes = (nodes) => ({ type: 'FETCH_NODES', payload: nodes });
+// const removeSelectedAC = () => ({ type: 'REMOVE_SELECTED' });
 
 
+
+
+export const checkedToggle = (id) => (dispatch) => {
+    dispatch(checkedToggleAC(id));
+}
+
+export const removeSelected = (nodes) => (dispatch) => {
+
+    (async function(){    
+        const promises = nodes.map(node => {
+            if (node.selected) {
+                const response = api.removeNode(node.id);
+                response.then(response => {
+                    if (response === null) {
+                        dispatch(removeNodeAC(node.id));
+                        // console.log('remove');
+                    } else {
+                        dispatch(showError());
+                    }
+                })
+            }
+        })
+        await Promise.all(promises);
+        // alert('done!');
+    })();
+   
+
+}
 
 
 export const getNodes = () => (dispatch) => {
 
     dispatch(showLoader());
 
-        const response = api.fetchNodes();
-        response.then(response => {
-            // console.log(response);
-            if(response) {
-                const nodes = Object.keys(response).map(key => {
-                    return {
-                        ...response[key],
-                        id: key 
-                    }
-                });
-                dispatch(fetchNodes(nodes));
-                dispatch(hideLoader());
-            } else {
-                dispatch(showError());
-            }
-        })  
+    const response = api.fetchNodes();
+    response.then(response => {
+        // console.log(response);
+        if (response) {
+            const nodes = Object.keys(response).map(key => {
+                return {
+                    ...response[key],
+                    id: key
+                }
+            });
+            dispatch(fetchNodes(nodes));
+            dispatch(hideLoader());
+        } else {
+            dispatch(showError());
+        }
+    })
 
-    
+
 }
 
 
@@ -117,10 +155,10 @@ export const addNode = (payload) => (dispatch) => {
 
     const response = api.addNode(payload);
     response.then(response => {
-        
-        if(response) {
+
+        if (response) {
             payload.id = response.name;
-            
+
             dispatch(addNodeAC(payload));
             // console.log(payload);
 
@@ -129,20 +167,20 @@ export const addNode = (payload) => (dispatch) => {
         } else {
             dispatch(showError());
         }
-    }) 
-    
+    })
+
 }
 
 export const removeNode = (id) => (dispatch) => {
 
     const response = api.removeNode(id);
     response.then(response => {
-        if(response === null) {
+        if (response === null) {
             dispatch(removeNodeAC(id));
             // console.log('remove');
         } else {
             dispatch(showError());
         }
-    }) 
-    
+    })
+
 }

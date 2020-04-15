@@ -19,8 +19,10 @@ code {
   /* margin-bottom: 0.7rem; */
 }
 
-.todo.selected span {
-  text-decoration: line-through;
+.todo.selected {
+  /* text-decoration: line-through; */
+  
+  background-color: #e0f2f1;
 }
 
 .todo label {
@@ -31,7 +33,7 @@ code {
   cursor: pointer;
   /* background: #f3f3f3; */
   border-bottom: 1px solid #c0bebe;
-  padding: 7px 0 7px 15px;
+  padding: 7px 7px 7px 15px;
 }
 
 /* .todo span {

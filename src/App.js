@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError } from './redux/nodesReducer';
+import { showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
 import { connect } from 'react-redux';
 import ShopingList from './components/ShopingList';
 import ShoppingBasket from './components/ShoppingBasket';
@@ -21,8 +21,8 @@ const setDate = () => {
 }
 
 
-const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
-  console.log(props.nodes);
+const App = ({ getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
+  // debugger;
 
   const [todoTitle, setTodoTitle] = useState('');
 
@@ -40,7 +40,7 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
         const payload = {
           title: todoTitle,
           date: setDate(),
-          completed: false
+          selected: false
         }
 
         addNode(payload);
@@ -53,41 +53,58 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, ...props }) => {
 
   return (
     <>
-    <div className='fixed'>
-      <div className='container'>
-        <h5 className='fixed-h'>ПОКУПКИ</h5>
+      <div className='fixed'>
+        <div className='container'>
+          <h5 className='fixed-h'>ПОКУПКИ</h5>
 
-        <div className='input-field'>
-          <input
-          className='white-text'
-            value={todoTitle}
-            onChange={e => setTodoTitle(e.target.value)}
-            onKeyPress={addTodo}
-            type='text'
-          />
-          <label>Введите товар </label>
-          {/* <i className="material-icons">add</i> */}
+          <div className='input-field'>
+            <input
+              className='white-text'
+              value={todoTitle}
+              onChange={e => setTodoTitle(e.target.value)}
+              onKeyPress={addTodo}
+              type='text'
+            />
+            <label>Введите товар </label>
+            {/* <i className="material-icons">add</i> */}
+          </div>
         </div>
+
+
+
+
+        <div className="waves-effect waves-light btn-flat deep-orange"
+          onClick={(e) => {
+            e.preventDefault();
+            removeSelected(props.nodes);
+          }}
+        >
+          <i className="material-icons center white-text">
+            delete удалить выделенные
+                    </i>
         </div>
       </div>
 
-    <div className="container scroll">
-      <ShopingList
-        nodes={props.nodes}
-        removeNode={removeNode}
-        checkedToggle={checkedToggle}
-        loading={props.loading}
-      />
 
-      <ShoppingBasket
-        nodes={props.nodes}
-        removeNode={removeNode}
-        checkedToggle={checkedToggle}
-        loading={props.loading}
-      />
 
-    </div>
-    </> 
+
+      <div className="container scroll">
+        <ShopingList
+          nodes={props.nodes}
+          removeNode={removeNode}
+          checkedToggle={checkedToggle}
+          loading={props.loading}
+        />
+
+        <ShoppingBasket
+          nodes={props.nodes}
+          removeNode={removeNode}
+          checkedToggle={checkedToggle}
+          loading={props.loading}
+        />
+
+      </div>
+    </>
   );
 }
 
@@ -109,7 +126,8 @@ const AppContainer = connect(mapStateToProps,
     checkedToggle,
     addNode,
     removeNode,
-    showError
+    showError,
+    removeSelected
   })(App);
 
 

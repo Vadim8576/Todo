@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 
 
-const TodoItem = ({ date, title, id, removeNode, checkedToggle, ...props }) => {
+const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...props }) => {
 
-
-    useEffect(() => {
-        setSelect();
-
-    }, [])
-
-
+// debugger;
     const cls = ['todo'];
 
-    if (complited) {
-        cls.push('completed');
+    if (selected) {
+        cls.push('selected');
     }
 
  
@@ -24,8 +18,13 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, ...props }) => {
             <label>
                 <input
                     type='checkbox'
-                    checked={complited}
-                    onChange={(e) => checkedToggle(id)}
+                    checked={selected}
+                    onChange={(e) => {
+                        
+                        console.log('ау');
+                        checkedToggle(id);
+                        }
+                    }
                 />
 
                 <span><b>{title}</b> <small>{date}</small></span>
@@ -38,7 +37,7 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, ...props }) => {
                 <div className="waves-effect waves-light btn-flat deep-orange"
                     onClick={(e) => {
                         e.preventDefault();
-                        removeNode(id)
+                        removeNode(id);
                     }}
                 >
                     <i className="material-icons center white-text">

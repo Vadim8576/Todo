@@ -3,7 +3,7 @@ import nodesReducer from './nodesReducer';
 import thunkMiddleware from 'redux-thunk';
 
 const redusers = combineReducers({
-    nodes: nodesReducer,
+    nodes: nodesReducer
     // auth: authReducer,
     // app: appReducer
 });

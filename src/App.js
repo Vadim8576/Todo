@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
+import { removeBasket, getData, getBasket, addInBasket, showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
 import { connect } from 'react-redux';
-import ShopingList from './components/ShopingList';
-import ShoppingBasket from './components/ShoppingBasket';
+import ShopingList from './components/Shop/ShopingList';
+import BasketList from './components/Basket/BasketList';
 import FooterBar from './components/FooterBar';
-import HeaderContainer from './components/HeaderContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 import { Route, Redirect } from 'react-router-dom';
 
 
@@ -24,61 +24,59 @@ import { Route, Redirect } from 'react-router-dom';
 // }
 
 
-const App = ({ getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
+const App = ({ removeBasket, getData, addInBasket, getBasket, getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
   // debugger;
-
-  // const [todoTitle, setTodoTitle] = useState('');
-
+  
+  
 
   useEffect(() => {
-    getNodes();
+    getData();
+    
   }, [])
 
-
-  // const addTodo = (e) => {
-  //   if (e.key === 'Enter') {
-
-  //     if (todoTitle !== '') {
-  //       const payload = {
-  //         title: todoTitle,
-  //         date: setDate(),
-  //         selected: false
-  //       }
-
-  //       addNode(payload);
-  //       setTodoTitle('');
-
-  //     }
-  //   }
-  // }
-
+  const len = {nodes: props.nodes.length, basket: props.basket.length};
 
   return (
     <>
-      <HeaderContainer addNode={addNode} />
+      <HeaderContainer addNode={addNode} len={len} />
 
-      {/* exact означает, что URL должен совпадать точь-в-точь */}
-      <Route exact path='/' render={() => <Redirect to={'/list'} />} />
 
-      <Route path='/list' render={() =>
-        <ShopingList
-          nodes={props.nodes}
-          removeNode={removeNode}
-          checkedToggle={checkedToggle}
-          loading={props.loading}
-        />} />
 
-      <Route path='/basket' render={() =>
-        <ShoppingBasket
-          nodes={props.nodes}
-          removeNode={removeNode}
-          checkedToggle={checkedToggle}
-          loading={props.loading}
-        />} />
+      <div className="container scroll">
 
-      <div className='todiListFooterSpace'></div>
+        <Route exact path='/' render={() => <Redirect to={'/list'} />} />
+
+        <Route path='/list' render={() =>
+          <ShopingList
+            nodes={props.nodes}
+            removeNode={removeNode}
+            checkedToggle={checkedToggle}
+            loading={props.loading}
+            addInBasket={addInBasket}
+            isError={props.isError}
+            nodeIsEmpty={props.nodeIsEmpty}
+          />} />
+
+        <Route path='/basket' render={() =>
+          <BasketList
+            basket={props.basket}
+            // removeNode={removeNode}
+            // checkedToggle={checkedToggle}
+            addInBasket={addInBasket}
+            loading={props.loading}
+            removeBasket={removeBasket}
+            isError={props.isError}
+            basketIsEmpty={props.basketIsEmpty}
+          />} />
+
+        <div className='todiListFooterSpace'></div>
+
+      </div>
 
       <FooterBar removeSelected={removeSelected} nodes={props.nodes} />
+
+
+
     </>
   );
 }
@@ -86,8 +84,9 @@ const App = ({ getNodes, addNode, removeNode, checkedToggle, removeSelected, ...
 
 const mapStateToProps = (state) => (
   {
-    loading: state.nodes.loading,
     nodes: state.nodes.nodes,
+    basket: state.nodes.basket,
+    loading: state.nodes.loading,
     isError: state.nodes.isError
   }
 )
@@ -102,7 +101,11 @@ const AppContainer = connect(mapStateToProps,
     addNode,
     removeNode,
     showError,
-    removeSelected
+    removeSelected,
+    addInBasket,
+    getBasket,
+    getData,
+    removeBasket
   })(App);
 
 

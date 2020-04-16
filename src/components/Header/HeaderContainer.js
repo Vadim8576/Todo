@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { addNode } from './../redux/nodesReducer';
+import { addNode } from '../../redux/nodesReducer';
 import { connect } from 'react-redux';
-import PopupMnu from './PopupMnu';
+import PopupMnu from '../Popup/PopupMnu';
 import { NavLink } from 'react-router-dom';
 import css from './headerContainer.module.css';
 
@@ -23,7 +23,7 @@ const setDate = () => {
 
 
 
-const Header = ({ addNode }) => {
+const Header = ({ addNode, len }) => {
 
   const [todoTitle, setTodoTitle] = useState('');
 
@@ -33,7 +33,7 @@ const Header = ({ addNode }) => {
       if (todoTitle !== '') {
         const payload = {
           title: todoTitle,
-          date: setDate(),
+          // date: setDate(),
           selected: false
         }
 
@@ -51,6 +51,11 @@ const Header = ({ addNode }) => {
         <div className='container'>
 
 
+
+            <PopupMnu />
+
+
+
           {/* <div className={css.titleContainer}>
             <div className='HWrapper'>
               Список покупок
@@ -60,8 +65,22 @@ const Header = ({ addNode }) => {
             </div>
           </div> */}
 
-         {/* <div className={css.title}>СПИСОК ПОКУПОК</div> */}
-         
+          {/* <div className={css.title}>СПИСОК ПОКУПОК</div> */}
+
+
+
+          <div className={css.titleContainer}>
+            <div className={css.linkWrapper}>
+              <NavLink to='/list' className={css.navlink} activeClassName={css.activeRoute}>
+                ПОКУПКИ <span>({len.nodes})</span>
+              </NavLink>
+            </div>
+            <div className={css.linkWrapper}>
+              <NavLink to='/basket' className={css.navlink} activeClassName={css.activeRoute}>
+                КОРЗИНА <span>({len.basket})</span>
+              </NavLink>
+            </div>
+          </div>
 
 
           <div className='input-field'>
@@ -81,20 +100,10 @@ const Header = ({ addNode }) => {
 
 
 
-        <div className={css.titleContainer}>
-          <div className={css.linkWrapper}>
-            <NavLink to='/list' className={css.navlink} activeClassName={css.activeRoute}>
-              ПОКУПКИ
-              </NavLink>
-          </div>
-          <div className={css.linkWrapper}>
-            <NavLink to='/basket' className={css.navlink} activeClassName={css.activeRoute}>
-              КОРЗИНА
-              </NavLink>
 
-          </div>
 
-        </div>
+
+
       </div>
 
 

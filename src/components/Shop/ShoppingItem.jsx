@@ -2,18 +2,15 @@ import React from 'react';
 
 
 
-const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...props }) => {
+const ShoppingItem = ({ date, title, id, removeNode, checkedToggle, selected, addInBasket }) => {
 
-// debugger;
     const cls = ['todo'];
 
     if (selected) {
         cls.push('selected');
     }
 
- 
     return (
-
         <li className={cls.join(' ')}>
             <label>
                 <input
@@ -23,16 +20,11 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...pro
                 />
 
                 <span><b>{title}</b> <small>{date}</small></span>
-
-                
-                {/* <a class="waves-effect waves-light btn-small">
-                    <i class="material-icons left">cloud</i>
-                    button
-                </a> */}
                 <div className="waves-effect waves-light btn-flat deep-orange my-btn"
                     onClick={(e) => {
                         e.preventDefault();
-                        removeNode(id);
+                        addInBasket({title, id})
+                        // removeNode(id);
                     }}
                 >
                     <i className="material-icons center white-text">
@@ -44,6 +36,6 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...pro
     );
 }
 
-export default TodoItem;
+export default ShoppingItem;
 
 

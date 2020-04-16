@@ -1,0 +1,42 @@
+.mnuWrapper {
+    position: relative;
+    width: 100%;
+    height: 38px;
+}
+
+
+
+.mnuBtn {
+
+    padding-top: 10px;
+    float: right;
+    cursor: pointer;
+}
+
+.mnuBtn i {
+
+    pointer-events: none;
+
+}
+
+.mnu {
+    z-index: 15;
+    position: absolute;
+    width: 250px;
+    padding: 20px;
+    /* height: 200px; */
+    /* border: 1px #000 solid; */
+    right: 0;
+    top: 38px;
+    background-color: #fff;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);
+}
+
+.mnu li {
+    padding: 15px 0;
+    border-bottom: 1px rgb(219, 219, 219) solid;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+}

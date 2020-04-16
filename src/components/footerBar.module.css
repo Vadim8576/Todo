@@ -1,0 +1,23 @@
+.footerBarBtnContainer {
+    display: inline-block;
+    vertical-align: middle;
+    border-left: 1px #dad7d7 solid;
+    border-right: 1px #dad7d7 solid;
+    /* padding: 0 7px; */
+}
+
+.footerBarWrapper {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    padding: 7px 0;
+    background-color: rgb(255, 255, 255, .9);
+    border-top: 1px #BDBDBD solid;
+    /* box-shadow: rgba(0, 0, 0, 0.5) 0 -2px 5px; */
+}
+
+.footerBarBtnContainer span {
+    font-size: 0.7rem;
+}

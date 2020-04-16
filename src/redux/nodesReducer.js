@@ -21,12 +21,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
-        // case REMOVE_SELECTED:
-        //     return {
-        //         ...state,
-        //         nodes: state.nodes.filter(node => !node.selected)
-        //     }
-
         case ADD_NODE:
             return {
                 ...state,
@@ -39,7 +33,7 @@ const reducer = (state = initialState, action) => {
                 nodes: state.nodes.map((todo) => {
                     if (todo.id === action.payload) {
                         todo.selected = !todo.selected;
-                        console.log('todo', todo);
+                        // console.log('todo', todo);
                     }
                     return todo;
                 })
@@ -63,7 +57,7 @@ const reducer = (state = initialState, action) => {
             }
 
         case FETCH_NODES: {
-            console.log('FETCH_NODES');
+            // console.log('FETCH_NODES');
             return {
                 ...state,
                 nodes: action.payload
@@ -100,6 +94,18 @@ export const checkedToggle = (id) => (dispatch) => {
     dispatch(checkedToggleAC(id));
 }
 
+export const removeNode = (id) => (dispatch) => {
+
+    const response = api.removeNode(id);
+    response.then(response => {
+        if (response === null) {
+            dispatch(removeNodeAC(id));
+        } else {
+            dispatch(showError());
+        }
+    })
+}
+
 export const removeSelected = (nodes) => (dispatch) => {
 
     (async function(){    
@@ -115,12 +121,11 @@ export const removeSelected = (nodes) => (dispatch) => {
                     }
                 })
             }
+            return node;
         })
         await Promise.all(promises);
         // alert('done!');
     })();
-   
-
 }
 
 
@@ -149,8 +154,6 @@ export const getNodes = () => (dispatch) => {
 }
 
 
-
-
 export const addNode = (payload) => (dispatch) => {
 
     const response = api.addNode(payload);
@@ -171,16 +174,3 @@ export const addNode = (payload) => (dispatch) => {
 
 }
 
-export const removeNode = (id) => (dispatch) => {
-
-    const response = api.removeNode(id);
-    response.then(response => {
-        if (response === null) {
-            dispatch(removeNodeAC(id));
-            // console.log('remove');
-        } else {
-            dispatch(showError());
-        }
-    })
-
-}

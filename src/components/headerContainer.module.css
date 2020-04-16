@@ -1,0 +1,35 @@
+.mnuWrapper{
+    padding-top: 1.2rem;
+}
+
+.mnuBtn {
+
+}
+
+.title {
+    color: #fff;
+    padding: 10px 0 0 0;
+}
+
+.titleContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    justify-content: center;
+}
+
+.linkWrapper {
+    padding: 0 5px;
+}
+
+.navlink {
+    transition: 0.4s all ease;
+    color: #fff;
+    font-size: 0.8rem;
+}
+
+.activeRoute {
+    color: yellow;
+    font-size: 1.6rem;
+}

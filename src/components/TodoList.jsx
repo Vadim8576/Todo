@@ -6,7 +6,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const TodoList = ({ nodes, removeNode, checkedToggle }) => {
 
-    console.log(nodes);
+    // console.log(nodes);
     return (
         <TransitionGroup component='ul' className='listGroup'>
             {nodes.map(item =>

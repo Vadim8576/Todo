@@ -19,12 +19,7 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...pro
                 <input
                     type='checkbox'
                     checked={selected}
-                    onChange={(e) => {
-                        
-                        console.log('ау');
-                        checkedToggle(id);
-                        }
-                    }
+                    onChange={(e) => checkedToggle(id)}
                 />
 
                 <span><b>{title}</b> <small>{date}</small></span>
@@ -34,7 +29,7 @@ const TodoItem = ({ date, title, id, removeNode, checkedToggle, selected, ...pro
                     <i class="material-icons left">cloud</i>
                     button
                 </a> */}
-                <div className="waves-effect waves-light btn-flat deep-orange"
+                <div className="waves-effect waves-light btn-flat deep-orange my-btn"
                     onClick={(e) => {
                         e.preventDefault();
                         removeNode(id);

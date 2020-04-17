@@ -19,7 +19,7 @@ const BasketItem = ({ title, id, removeBasket }) => {
                 <div className="waves-effect waves-light btn-flat deep-orange my-btn"
                     onClick={(e) => {
                         e.preventDefault();
-                        removeBasket({title, id});
+                        removeBasket({title, id, selected: false});
                         // addNode(id);
                         
                     }}

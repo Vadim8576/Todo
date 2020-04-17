@@ -6,6 +6,7 @@ import Toast from '../Toast/Toast';
 
 
 
+
 const ShopingList = ({ addInBasket, removeNode, checkedToggle, nodes, isError, ...props }) => {
 
 
@@ -17,14 +18,16 @@ const ShopingList = ({ addInBasket, removeNode, checkedToggle, nodes, isError, .
          } else {
              setNodeEmpty(false)
         }
-        // console.log('length=', nodes.length);
-        // console.log('nodeIsEmpty=', nodeIsEmpty);
     }, [nodes.length]);
     
+
+
+
     
     return (
         <>
-            <Toast text={'Товар добавлен в список!'} />
+            {/* <Toast text={'Товар добавлен в список!'} /> */}
+            
             <div className={css.shoppingList}>
                 {!isError && props.loading 
                     ? <div className="progress">

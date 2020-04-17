@@ -142,3 +142,60 @@ code {
 .todiListFooterSpace {
   padding: 30px;
 }
+
+
+
+/* --------------- Toast ----------------------------- */
+
+.toastContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.toast {
+  top: 0;
+  opacity: 0;
+  transition: 4s all ease;
+  position: absolute;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+  color: red;
+}
+
+/* .toast.visible {
+  top: -100px;
+  opacity: 0;
+} */
+
+
+
+.toast.visible {
+  animation: toast 4s ease-out forwards;
+}
+
+@keyframes toast {
+  0% {
+    /* transform: translateY(0); */
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    /* transform: translateY(-50px); */
+  }
+  80% {
+    opacity: 1;
+    /* transform: translateY(-50px); */
+  }
+  100% {
+    opacity: 0;
+    /* transform: translateY(-50px); */
+  }
+}
+
+/* --------------- Toast ----------------------------- */

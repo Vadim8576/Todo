@@ -189,6 +189,8 @@ export const getNodes = () => (dispatch) => {
             // если response false - ошибка
         } else if (response !== null) {
             dispatch(showError());
+        } else if(response === null) {
+            dispatch(hideLoader());
         }
     })
 
@@ -254,6 +256,8 @@ export const getBasket = () => (dispatch) => {
             // если response false - ошибка
         } else if (response !== null) {
             dispatch(showError());
+        } else if(response === null) {
+            dispatch(hideLoader());
         }
     })
 }
@@ -264,6 +268,7 @@ export const removeBasket = (payload) => (dispatch) => {
 
         if (response === null) {
             dispatch(removeBasketAC(payload.id));
+            console.log(payload);
             dispatch(addNode(payload));
 
             // dispatch(getNodes());

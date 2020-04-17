@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BasketItem from './BasketItem';
 import css from './../css.module.css';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
@@ -11,14 +11,18 @@ const BasketList = ({ addInBasket, basket, isError, removeBasket, ...props }) =>
     const [basketIsEmpty, setBasketEmpty] = useState(false);
     
 
-    if(basket && basket.length === 0) {
-        setBasketEmpty(true);
-    } 
+    useEffect(() => {
+        if(basket.length === 0) {
+            setBasketEmpty(true);
+         } else {
+            setBasketEmpty(false)
+        }
+    }, [basket.length]);
     
     return (
         <>
             <div className={css.shoppingList}>
-                {props.loading && !basketIsEmpty
+                {!isError && props.loading
                     ? <div className="progress">
                         <div className="indeterminate"></div>
                     </div>
@@ -28,12 +32,12 @@ const BasketList = ({ addInBasket, basket, isError, removeBasket, ...props }) =>
                                 <CSSTransition
                                     key={item.id}
                                     classNames={'node'}
-                                    timeout={800}>
+                                    timeout={500}>
                                     <BasketItem {...item} addInBasket={addInBasket} removeBasket={removeBasket} />
                                 </CSSTransition>)}
                         </TransitionGroup>
                         : <span>Ошибка загрузки данных с сервера!</span>}
-                    {basketIsEmpty && <div>Корзина пуста</div>}
+                    {basketIsEmpty && <div className={css.noItem}>Корзина пуста</div>}
             </div>
         </>
     )

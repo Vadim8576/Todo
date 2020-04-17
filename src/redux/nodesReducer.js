@@ -107,6 +107,8 @@ const nodesReducer = (state = initialState, action) => {
 export default nodesReducer;
 
 
+
+
 const checkedToggleAC = (id) => ({ type: 'TOGGLE', payload: id });
 export const showError = () => ({ type: 'SHOW_ERROR' });
 export const showLoader = () => ({ type: 'SHOW_LOADER' });

@@ -52,7 +52,7 @@ const Header = ({ addNode, len }) => {
 
 
 
-            <PopupMnu />
+          {/* <PopupMnu /> */}
 
 
 
@@ -72,11 +72,13 @@ const Header = ({ addNode, len }) => {
           <div className={css.titleContainer}>
             <div className={css.linkWrapper}>
               <NavLink to='/list' className={css.navlink} activeClassName={css.activeRoute}>
+                {/* <i className="material-icons center white-text">list</i> */}
                 ПОКУПКИ <span>({len.nodes})</span>
               </NavLink>
             </div>
             <div className={css.linkWrapper}>
               <NavLink to='/basket' className={css.navlink} activeClassName={css.activeRoute}>
+                {/* <i className="material-icons center white-text">shopping_cart</i> */}
                 КОРЗИНА <span>({len.basket})</span>
               </NavLink>
             </div>

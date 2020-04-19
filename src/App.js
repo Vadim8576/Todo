@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { removeBasket, getData, getBasket, addInBasket, showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
+import { enableBtn, disableBtn, removeBasket, getData, getBasket, addInBasket, showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
 import { connect } from 'react-redux';
 import ShopingList from './components/Shop/ShopingList';
 import BasketList from './components/Basket/BasketList';
 import FooterBar from './components/FooterBar';
 import HeaderContainer from './components/Header/HeaderContainer';
 import { Route, Redirect } from 'react-router-dom';
+
+import { ReactReduxContext } from 'react-redux';
 
 
 // const setDate = () => {
@@ -24,10 +26,10 @@ import { Route, Redirect } from 'react-router-dom';
 // }
 
 
-const App = ({ removeBasket, getData, addInBasket, getBasket, getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
+const App = ({ enableBtn, disableBtn, removeBasket, getData, addInBasket, getBasket, getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
   // debugger;
   
-  
+  // console.log(store);
 
   useEffect(() => {
     getData();
@@ -39,6 +41,14 @@ const App = ({ removeBasket, getData, addInBasket, getBasket, getNodes, addNode,
   return (
     <>
       <HeaderContainer addNode={addNode} len={len} />
+
+      <ReactReduxContext.Consumer>
+
+      {({ store }) => {
+        console.log(store.getState());
+      }}
+
+      </ReactReduxContext.Consumer>
 
 
 
@@ -55,6 +65,9 @@ const App = ({ removeBasket, getData, addInBasket, getBasket, getNodes, addNode,
             addInBasket={addInBasket}
             isError={props.isError}
             nodeIsEmpty={props.nodeIsEmpty}
+            enableBtn={enableBtn}
+            disableBtn={disableBtn}
+            btnIsEnabled={props.btnIsEnabled}
           />} />
 
         <Route path='/basket' render={() =>
@@ -67,6 +80,8 @@ const App = ({ removeBasket, getData, addInBasket, getBasket, getNodes, addNode,
             removeBasket={removeBasket}
             isError={props.isError}
             basketIsEmpty={props.basketIsEmpty}
+            enableBTN={enableBtn}
+            disableBTN={disableBtn}
           />} />
 
         <div className='todiListFooterSpace'></div>
@@ -87,7 +102,8 @@ const mapStateToProps = (state) => (
     nodes: state.nodes.nodes,
     basket: state.nodes.basket,
     loading: state.nodes.loading,
-    isError: state.nodes.isError
+    isError: state.nodes.isError,
+    btnIsEnabled: state.nodes.btnIsEnabled,
   }
 )
 
@@ -105,7 +121,9 @@ const AppContainer = connect(mapStateToProps,
     addInBasket,
     getBasket,
     getData,
-    removeBasket
+    removeBasket,
+    enableBtn,
+    disableBtn, 
   })(App);
 
 

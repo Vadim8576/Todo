@@ -2,7 +2,7 @@ import React from 'react';
 
 
 
-const ShoppingItem = ({ date, title, id, removeNode, checkedToggle, selected, addInBasket }) => {
+const ShoppingItem = ({ enableBtn, disableBtn, btnIsEnabled, date, title, id, removeNode, checkedToggle, selected, addInBasket }) => {
 
     const cls = ['todo'];
 
@@ -20,11 +20,11 @@ const ShoppingItem = ({ date, title, id, removeNode, checkedToggle, selected, ad
                 />
 
                 <span><b>{title}</b> <small>{date}</small></span>
-                <div className="waves-effect waves-light btn-flat deep-orange my-btn"
+                <div className={`waves-effect waves-light btn-flat deep-orange my-btn ${btnIsEnabled ? '' : 'disabled'}`}
                     onClick={(e) => {
                         e.preventDefault();
                         addInBasket({title, id})
-                        // removeNode(id);
+                        disableBtn();
                     }}
                 >
                     <i className="material-icons center white-text">

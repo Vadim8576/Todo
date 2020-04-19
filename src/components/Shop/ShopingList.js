@@ -7,9 +7,9 @@ import Toast from '../Toast/Toast';
 
 
 
-const ShopingList = ({ addInBasket, removeNode, checkedToggle, nodes, isError, ...props }) => {
+const ShopingList = ({ enableBtn, disableBtn, addInBasket, removeNode, checkedToggle, nodes, isError, ...props }) => {
 
-
+    console.log(disableBtn);
     const [nodeIsEmpty, setNodeEmpty] = useState(false);
     
     useEffect(() => {
@@ -40,7 +40,14 @@ const ShopingList = ({ addInBasket, removeNode, checkedToggle, nodes, isError, .
                                     key={item.id}
                                     classNames={'node'}
                                     timeout={500}>
-                                    <ShoppingItem {...item} removeNode={removeNode} checkedToggle={checkedToggle} addInBasket={addInBasket} />
+                                    <ShoppingItem {...item}
+                                        removeNode={removeNode}
+                                        checkedToggle={checkedToggle}
+                                        addInBasket={addInBasket}
+                                        enableBtn={enableBtn}
+                                        disableBtn={disableBtn}
+                                        btnIsEnabled={props.btnIsEnabled}
+                                        />
                                 </CSSTransition>)}
                         </TransitionGroup>
                         : isError && <span>Ошибка загрузки данных с сервера!</span>}

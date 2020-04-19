@@ -16,20 +16,36 @@ const FETCH_BASKET = 'FETCH_BASKET';
 const REMOVE_BASKET = 'REMOVE_BASKET';
 
 
-
+const DISABLE_BTN = 'DISABLE_BTN';
+const ENABLE_BTN = 'ENABLE_BTN';
 
 
 const initialState = {
     nodes: [],
     basket: [],
     loading: false,
-    isError: false
+    isError: false,
+    btnIsEnabled: true
 }
 
 
 
 const nodesReducer = (state = initialState, action) => {
     switch (action.type) {
+
+        case ENABLE_BTN:
+            return {
+                ...state,
+                btnIsEnabled: true
+            }
+        
+        case DISABLE_BTN:
+            return {
+                ...state,
+                btnIsEnabled: false
+            }
+
+       // ------------------- basket -------------------------
 
         case ADD_IN_BASKET:
             return {
@@ -108,6 +124,8 @@ export default nodesReducer;
 
 
 
+const enableBtnAC = () => ({ type: 'ENABLE_BTN' });
+const disableBtnAC = () => ({ type: 'DISABLE_BTN' });
 
 const checkedToggleAC = (id) => ({ type: 'TOGGLE', payload: id });
 export const showError = () => ({ type: 'SHOW_ERROR' });
@@ -125,6 +143,15 @@ const removeBasketAC = (id) => ({ type: 'REMOVE_BASKET', payload: id });
 
 
 
+export const enableBtn = () => (dispatch) => {
+    dispatch(enableBtnAC());
+}
+
+export const disableBtn = () => (dispatch) => {
+    dispatch(disableBtnAC());
+}
+
+
 export const getData = () => (dispatch) => {
     dispatch(getNodes());
     dispatch(getBasket());
@@ -134,16 +161,16 @@ export const checkedToggle = (id) => (dispatch) => {
     dispatch(checkedToggleAC(id));
 }
 
-export const removeNode = (id) => (dispatch) => {
+export const removeNode = (id) => async (dispatch) => {
 
-    const response = api.removeNode(id);
-    response.then(response => {
-        if (response === null) {
-            dispatch(removeNodeAC(id));
-        } else {
-            dispatch(showError());
-        }
-    })
+    const response = await api.removeNode(id);
+   
+    if (response === null) {
+        dispatch(removeNodeAC(id));
+    } else {
+        dispatch(showError());
+    }
+   
 }
 
 export const removeSelected = (nodes) => (dispatch) => {
@@ -169,79 +196,69 @@ export const removeSelected = (nodes) => (dispatch) => {
 }
 
 
-export const getNodes = () => (dispatch) => {
+export const getNodes = () => async (dispatch) => {
 
     dispatch(showLoader());
 
-    const response = api.fetchNodes();
-    response.then(response => {
-        // console.log(response);
-        if (response) {
-            const nodes = Object.keys(response).map(key => {
-                return {
-                    ...response[key],
-                    id: key
-                }
-            });
-            dispatch(fetchNodes(nodes));
-            dispatch(hideLoader());
-            // если response null - на сервере нет данных (корзина пуста)
-            // если response false - ошибка
-        } else if (response !== null) {
-            dispatch(showError());
-        } else if(response === null) {
-            dispatch(hideLoader());
-        }
-    })
-
+    const  response = await api.fetchNodes();
+  
+    if (response) {
+        const nodes = Object.keys(response).map(key => {
+            return {
+                ...response[key],
+                id: key
+            }
+        });
+        dispatch(fetchNodes(nodes));
+        dispatch(hideLoader());
+        // если response null - на сервере нет данных (корзина пуста)
+        // если response false - ошибка
+    } else if (response !== null) {
+        dispatch(showError());
+    } else if(response === null) {
+        dispatch(hideLoader());
+    }
 
 }
 
 
-export const addNode = (payload) => (dispatch) => {
+export const addNode = (payload) => async (dispatch) => {
 
-    const response = api.addNode(payload);
-    response.then(response => {
-
-        if (response) {
-            payload.id = response.name;
-            dispatch(addNodeAC(payload));
-        } else {
-            dispatch(showError());
-        }
-    })
+    const response = await api.addNode(payload);
+   
+    if (response) {
+        payload.id = response.name;
+        dispatch(addNodeAC(payload));
+    } else {
+        dispatch(showError());
+    }
 
 }
+
 
 // ------------------- Basket -------------------------
 
-export const addInBasket = (payload) => (dispatch) => {
+export const addInBasket = (payload) => async (dispatch) => {
 
-    const response = basket_api.addBasket(payload);
-    response.then(response => {
-
-        if (response) {
-            // payload.id = response.name;
-            dispatch(addInBasketAC(payload));
-
-            dispatch(removeNode(payload.id));
-
-        } else {
-            dispatch(showError());
-        }
-    })
-
+    const response = await basket_api.addBasket(payload);
+   
+    if (response) {
+        // payload.id = response.name;
+        dispatch(addInBasketAC(payload));
+        dispatch(removeNode(payload.id));
+        dispatch(enableBtnAC());
+    } else {
+        dispatch(showError());
+    }
 }
 
 
-export const getBasket = () => (dispatch) => {
+export const getBasket = () => async (dispatch) => {
 
     dispatch(showLoader());
 
-    const response = basket_api.fetchBasket();
-    response.then(response => {
-        console.log(response);
-
+    const response = await basket_api.fetchBasket();
+    
         if (response) {
             const basket = Object.keys(response).map(key => {
                 return {
@@ -259,21 +276,20 @@ export const getBasket = () => (dispatch) => {
         } else if(response === null) {
             dispatch(hideLoader());
         }
-    })
 }
 
-export const removeBasket = (payload) => (dispatch) => {
-    const response = basket_api.removeBasket(payload.id);
-    response.then(response => {
+export const removeBasket = (payload) => async (dispatch) => {
 
-        if (response === null) {
-            dispatch(removeBasketAC(payload.id));
-            console.log(payload);
-            dispatch(addNode(payload));
+    const response = await basket_api.removeBasket(payload.id);
 
-            // dispatch(getNodes());
-        } else {
-            dispatch(showError());
-        }
-    })
+    if (response === null) {
+        dispatch(removeBasketAC(payload.id));
+        console.log(payload);
+        dispatch(addNode(payload));
+
+        // dispatch(getNodes());
+    } else {
+        dispatch(showError());
+    }
 }
+

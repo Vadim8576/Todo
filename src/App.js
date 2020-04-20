@@ -2,34 +2,19 @@ import React, { useEffect } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import { enableBtn, disableBtn, removeBasket, getData, getBasket, addInBasket, showLoader, hideLoader, checkedToggle, addNode, removeNode, getNodes, showError, removeSelected } from './redux/nodesReducer';
-import { connect } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import ShopingList from './components/Shop/ShopingList';
 import BasketList from './components/Basket/BasketList';
 import FooterBar from './components/FooterBar';
 import HeaderContainer from './components/Header/HeaderContainer';
 import { Route, Redirect } from 'react-router-dom';
-
-import { ReactReduxContext } from 'react-redux';
-
-
-// const setDate = () => {
-//   const options = {
-//     year: 'numeric',
-//     month: 'numeric',
-//     day: 'numeric',
-//     hour: 'numeric',
-//     minute: 'numeric',
-//     second: 'numeric',
-//     timezone: 'UTC'
-//   };
-//   return new Date().toLocaleString("ru", options);
-// }
+import WithContext from './components/hoc/withContext';
+import { compose } from 'redux';
 
 
 const App = ({ enableBtn, disableBtn, removeBasket, getData, addInBasket, getBasket, getNodes, addNode, removeNode, checkedToggle, removeSelected, ...props }) => {
   // debugger;
   
-  // console.log(store);
 
   useEffect(() => {
     getData();
@@ -38,19 +23,14 @@ const App = ({ enableBtn, disableBtn, removeBasket, getData, addInBasket, getBas
 
   const len = {nodes: props.nodes.length, basket: props.basket.length};
 
+
+
+
   return (
     <>
+
+
       <HeaderContainer addNode={addNode} len={len} />
-
-      <ReactReduxContext.Consumer>
-
-      {({ store }) => {
-        console.log(store.getState());
-      }}
-
-      </ReactReduxContext.Consumer>
-
-
 
       <div className="container scroll">
 
@@ -108,7 +88,9 @@ const mapStateToProps = (state) => (
 )
 
 
-const AppContainer = connect(mapStateToProps,
+const AppContainer = compose(
+
+  connect(mapStateToProps,
   {
     getNodes,
     showLoader,
@@ -124,7 +106,8 @@ const AppContainer = connect(mapStateToProps,
     removeBasket,
     enableBtn,
     disableBtn, 
-  })(App);
+  }))(App);
+
 
 
 export default AppContainer;

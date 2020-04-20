@@ -9,7 +9,6 @@ import Toast from '../Toast/Toast';
 
 const ShopingList = ({ enableBtn, disableBtn, addInBasket, removeNode, checkedToggle, nodes, isError, ...props }) => {
 
-    console.log(disableBtn);
     const [nodeIsEmpty, setNodeEmpty] = useState(false);
     
     useEffect(() => {

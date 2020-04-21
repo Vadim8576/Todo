@@ -284,7 +284,6 @@ export const removeBasket = (payload) => async (dispatch) => {
 
     if (response === null) {
         dispatch(removeBasketAC(payload.id));
-        console.log(payload);
         dispatch(addNode(payload));
 
         // dispatch(getNodes());

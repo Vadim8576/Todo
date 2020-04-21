@@ -2,7 +2,18 @@ import React from 'react';
 
 
 
-const ShoppingItem = ({ enableBtn, disableBtn, btnIsEnabled, date, title, id, removeNode, checkedToggle, selected, addInBasket }) => {
+const ShoppingItem = (
+    {
+        date, title, id,
+        enableBtn,
+        disableBtn,
+        btnIsEnabled, 
+        removeNode,
+        checkedToggle,
+        selected,
+        addInBasket
+    }
+    ) => {
 
     const cls = ['todo'];
 

@@ -7,7 +7,7 @@ import Toast from '../Toast/Toast';
 
 
 
-const ShopingList = ({ enableBtn, disableBtn, addInBasket, removeNode, checkedToggle, nodes, isError, ...props }) => {
+const ShopingList = ({ nodes, isError, loading, ...props }) => {
 
     const [nodeIsEmpty, setNodeEmpty] = useState(false);
     
@@ -28,7 +28,7 @@ const ShopingList = ({ enableBtn, disableBtn, addInBasket, removeNode, checkedTo
             {/* <Toast text={'Товар добавлен в список!'} /> */}
             
             <div className={css.shoppingList}>
-                {!isError && props.loading 
+                {!isError && loading 
                     ? <div className="progress">
                         <div className="indeterminate"></div>
                     </div>
@@ -39,14 +39,7 @@ const ShopingList = ({ enableBtn, disableBtn, addInBasket, removeNode, checkedTo
                                     key={item.id}
                                     classNames={'node'}
                                     timeout={500}>
-                                    <ShoppingItem {...item}
-                                        removeNode={removeNode}
-                                        checkedToggle={checkedToggle}
-                                        addInBasket={addInBasket}
-                                        enableBtn={enableBtn}
-                                        disableBtn={disableBtn}
-                                        btnIsEnabled={props.btnIsEnabled}
-                                        />
+                                    <ShoppingItem {...item} {...props} />
                                 </CSSTransition>)}
                         </TransitionGroup>
                         : isError && <span>Ошибка загрузки данных с сервера!</span>}

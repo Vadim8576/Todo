@@ -5,7 +5,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 
 
-const BasketList = ({ addInBasket, basket, isError, removeBasket, ...props }) => {
+const BasketList = ({ isError, loading, basket, ...props }) => {
     // console.log(props.nodes);
     
     const [basketIsEmpty, setBasketEmpty] = useState(false);
@@ -22,7 +22,7 @@ const BasketList = ({ addInBasket, basket, isError, removeBasket, ...props }) =>
     return (
         <>
             <div className={css.shoppingList}>
-                {!isError && props.loading
+                {!isError && loading
                     ? <div className="progress">
                         <div className="indeterminate"></div>
                     </div>
@@ -33,7 +33,7 @@ const BasketList = ({ addInBasket, basket, isError, removeBasket, ...props }) =>
                                     key={item.id}
                                     classNames={'node'}
                                     timeout={500}>
-                                    <BasketItem {...item} addInBasket={addInBasket} removeBasket={removeBasket} />
+                                    <BasketItem {...item} {...props} />
                                 </CSSTransition>)}
                         </TransitionGroup>
                         : <span>Ошибка загрузки данных с сервера!</span>}

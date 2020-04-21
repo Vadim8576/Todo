@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
-import { addNode } from '../../redux/nodesReducer';
-import { connect } from 'react-redux';
 import PopupMnu from '../Popup/PopupMnu';
 import { NavLink } from 'react-router-dom';
-import css from './headerContainer.module.css';
+import css from './header.module.css';
 
 
 
-const setDate = () => {
-  const options = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    timezone: 'UTC'
-  };
-  return new Date().toLocaleString("ru", options);
-}
+// const setDate = () => {
+//   const options = {
+//     year: 'numeric',
+//     month: 'numeric',
+//     day: 'numeric',
+//     hour: 'numeric',
+//     minute: 'numeric',
+//     second: 'numeric',
+//     timezone: 'UTC'
+//   };
+//   return new Date().toLocaleString("ru", options);
+// }
 
 
 
 
-const Header = ({ addNode, len }) => {
+const Header = ({ addNode, len, ...props }) => {
 
   const [todoTitle, setTodoTitle] = useState('');
 
@@ -36,11 +34,10 @@ const Header = ({ addNode, len }) => {
           // date: setDate(),
           selected: false
         }
-
         addNode(payload);
         setTodoTitle('');
-
       }
+
     }
   }
 
@@ -50,24 +47,7 @@ const Header = ({ addNode, len }) => {
       <div className='fixed'>
         <div className='container'>
 
-
-
-          {/* <PopupMnu /> */}
-
-
-
-          {/* <div className={css.titleContainer}>
-            <div className='HWrapper'>
-              Список покупок
-            </div>
-            <div className='mnuWrapper'>
-              <PopupMnu />
-            </div>
-          </div> */}
-
-          {/* <div className={css.title}>СПИСОК ПОКУПОК</div> */}
-
-
+          <PopupMnu {...props} />
 
           <div className={css.titleContainer}>
             <div className={css.linkWrapper}>
@@ -98,40 +78,13 @@ const Header = ({ addNode, len }) => {
           </div>
         </div>
 
-
-
-
-
-
-
-
-
       </div>
-
-
-
-
-
     </>
   );
 }
 
 
-const mapStateToProps = (state) => (
-  {
-    loading: state.nodes.loading,
-    nodes: state.nodes.nodes,
-    isError: state.nodes.isError
-  }
-)
 
-
-const HeaderContainer = connect(mapStateToProps,
-  {
-    addNode
-  })(Header);
-
-
-export default HeaderContainer;
+export default Header;
 
 
